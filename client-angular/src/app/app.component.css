@@ -1,0 +1,14 @@
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+#paypal-button-container {
+  margin-top: 20px;
+}
+.container {
+  max-width: 800px;
+}

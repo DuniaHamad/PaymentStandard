@@ -1,0 +1,36 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Schmuck und Uhren</h1>
+  <p class="text-center mb-5">Entdecken Sie unsere handgefertigten Schmuckstücke und Uhren, die perfekt für jeden Anlass sind.</p>
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-6 mb-4" *ngFor="let product of products">
+      <div class="card h-100 text-center">
+        <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}" style="max-height: 200px; object-fit: contain;">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text"><strong>Preis: {{ product.price | currency:'EUR':'symbol' }}</strong></p>
+          <p class="card-text"><strong>Steuersatz: 19%</strong></p> <!-- Steuerinformation hinzufügen -->
+          <input type="number" [(ngModel)]="product.quantity" min="1" value="1" class="form-control mb-2" style="width: 80px; margin: 0 auto;">
+          <button class="btn btn-primary" (click)="addToCart(product)">In den Warenkorb</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warenkorb Zusammenfassung -->
+  <h2 class="mt-5">Warenkorb</h2>
+  <ul class="list-group mb-4">
+    <li class="list-group-item" *ngFor="let item of cart">
+      {{ item.product.name }} - Preis: {{ item.product.price | currency:'EUR':'symbol' }} - Menge: {{ item.quantity }}
+    </li>
+  </ul>
+
+  <div class="mb-3">
+    <p><strong>Zwischensumme: {{ calculateTotal().subtotal | currency:'EUR':'symbol' }}</strong></p>
+    <p><strong>Gesamtsteuer (19%): {{ calculateTotal().totalTax | currency:'EUR':'symbol' }}</strong></p>
+    <p><strong>Gesamtpreis: {{ calculateTotal().total | currency:'EUR':'symbol' }}</strong></p>
+  </div>
+
+  <div id="paypal-button-container" class="text-center mt-4"></div>
+  <p id="result-message" class="text-center mt-2"></p>
+</div>
