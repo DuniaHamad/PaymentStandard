@@ -16,7 +16,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware zum Parsen von JSON-Anfragen
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'src/assets')));
-
 // CORS-Konfiguration
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -24,6 +23,8 @@ app.use((req, res, next) => {
     next();
 });
 
+// Verarbeitet Bestellungen,
+// berechnet Gesamtkosten und erstellt eine Bestell-ID.
 app.post('/api/orders', (req, res) => {
     try {
         const { cart } = req.body;
@@ -63,6 +64,7 @@ app.post('/api/orders', (req, res) => {
     }
 });
 
+// Erstellt eine Bestellung bei PayPal.
 app.post('/api/paypal/create-order', async (req, res) => {
     const { total, products } = req.body;
 
@@ -72,7 +74,7 @@ app.post('/api/paypal/create-order', async (req, res) => {
             reference_id: 'unique_reference_id',
             amount: {
                 currency_code: 'EUR', // Währung
-                value: total.toFixed(2), // Gesamtbetrag
+                value: total.toFixed(2),
                 breakdown: {
                     item_total: {
                         currency_code: 'EUR',
@@ -89,11 +91,6 @@ app.post('/api/paypal/create-order', async (req, res) => {
                 quantity: product.quantity
             }))
         }],
-        //bitte korrigieren Sie diese Angaben an Ihre PayPal-App
-        application_context: {
-            return_url: 'https://example.com/returnUrl',
-            cancel_url: 'https://example.com/cancelUrl'
-        }
     };
 
     try {
@@ -120,11 +117,10 @@ app.post('/api/paypal/create-order', async (req, res) => {
         res.status(500).json({ error: `Error creating PayPal order: ${error.message}` });
     }
 });
-// Funktion zur Abrufung des Access Tokens
 
 async function getAccessToken() {
-    const clientId = process.env.PAYPAL_CLIENT_ID; // Ihre Client-ID aus der PayPal-App
-    const clientSecret = process.env.PAYPAL_CLIENT_SECRET; // Ihr Client-Secret aus der PayPal-App
+    const clientId = process.env.PAYPAL_CLIENT_ID;
+    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
     const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
         method: 'POST',

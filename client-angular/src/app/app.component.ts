@@ -5,8 +5,6 @@ import { FormsModule } from "@angular/forms";
 import { ApiService } from "./services/api.service";
 import { Product } from './product.model';
 import {lastValueFrom} from "rxjs";
-
-
 declare var paypal: any;
 
 @Component({
@@ -67,6 +65,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  //lädt das Paypal SDK dynamisch
   loadPayPalScript(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const script = document.createElement('script');
@@ -80,6 +79,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // setzt den Paypal Button mit der Logik für die Erstellung und Genehmigung von Bestellungen
   renderPayPalButton(): void {
     paypal.Buttons({
       createOrder: async () => {
@@ -125,6 +125,7 @@ export class AppComponent implements OnInit {
   }
 
   calculateTotal(): { subtotal: number; totalTax: number; total: number } {
+    // acc ist Akkumulator, die bisherige Gesamtpreis berechnet
     const subtotal = this.cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const totalTax = this.cart.reduce((acc, item) => acc + (item.product.price * item.product.taxRate * item.quantity), 0);
     const total = subtotal + totalTax;
