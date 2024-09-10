@@ -9,7 +9,6 @@
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">{{ product.description }}</p>
           <p class="card-text"><strong>Preis: {{ product.price | currency:'EUR':'symbol' }}</strong></p>
-          <p class="card-text"><strong>Steuersatz: 19%</strong></p> <!-- Steuerinformation hinzufügen -->
           <input type="number" [(ngModel)]="product.quantity" min="1" value="1" class="form-control mb-2" style="width: 80px; margin: 0 auto;">
           <button class="btn btn-primary" (click)="addToCart(product)">In den Warenkorb</button>
         </div>

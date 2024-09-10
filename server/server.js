@@ -28,9 +28,8 @@ app.post('/api/orders', (req, res) => {
     try {
         const { cart } = req.body;
 
-        // Überprüfung, ob der Warenkorb vorhanden ist
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
-            return res.status(400).json({ error: 'Warenkorb ist erforderlich.' });
+            return res.status(400).json({ error: 'Warenkorb ist leer.' });
         }
 
         // Berechnung der Gesamtsumme und der Steuer
@@ -39,10 +38,9 @@ app.post('/api/orders', (req, res) => {
         const total = subtotal + totalTax;
 
         // Generierung einer eindeutigen Bestell-ID
-        const orderId = Date.now().toString(); // Beispiel für eine eindeutige ID
+        const orderId = Date.now().toString();
         console.log('Generated orderId:', orderId);
 
-        // Erstellung des Bestellobjekts
         const order = {
             id: orderId,
             products: cart.map(item => ({
@@ -91,6 +89,7 @@ app.post('/api/paypal/create-order', async (req, res) => {
                 quantity: product.quantity
             }))
         }],
+        //bitte korrigieren Sie diese Angaben an Ihre PayPal-App
         application_context: {
             return_url: 'https://example.com/returnUrl',
             cancel_url: 'https://example.com/cancelUrl'
